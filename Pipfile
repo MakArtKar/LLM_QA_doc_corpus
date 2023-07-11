@@ -4,6 +4,19 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+jupyterlab = "*"
+numpy = "*"
+torch = "*"
+langchain = "*"
+install = "*"
+huggingface-hub = "*"
+python-dotenv = "*"
+tqdm = "*"
+pipfile = "*"
+transformers = "==4.22.2"
+sentencepiece = "*"
+protobuf = "==3.20.0"
+xformers = "*"
 
 [dev-packages]
 
