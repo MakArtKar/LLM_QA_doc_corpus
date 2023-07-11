@@ -1,35 +1,44 @@
-# import pandas as pd
-# from sentence_transformers import SentenceTransformer, util
-# import torch
+import os
+import pandas as pd
 from langchain.embeddings import SentenceTransformerEmbeddings
 from langchain.vectorstores import FAISS
 from langchain.document_loaders.csv_loader import CSVLoader
+from datetime import date
 
 class Database:
-    def __init__(self, csv_file_path):
-        # self.data = pd.read_csv(csv_file_path)
-        # self.model = SentenceTransformer('paraphrase-multilingual-mpnet-base-v2')
-        # self.embeddings = self.model.encode(self.data['text'])
-        # self.messages = list(self.data['text'])
+    def __init__(self):
+        self.data = pd.read_csv("/home/makart/data/important.csv")
         self.faiss_db = None
+        self.embeddings = SentenceTransformerEmbeddings(model_name="paraphrase-multilingual-mpnet-base-v2")
+        self.initialize_faiss_db()
 
-    # def add_message(self, message):
-    #     self.messages.append(message)
-    #     new_embedding = self.model.encode([message])
-    #     self.embeddings = torch.cat([self.embeddings, new_embedding])
-    #     if self.faiss_db is not None:
-    #         self.faiss_db.add_document(message)
+    def add_message(self, message):
+        self.data = self.data.append(message, ignore_index=True)
 
     def initialize_faiss_db(self):
-        loader = CSVLoader(file_path="/home/makart/data/important.csv")
-        documents = loader.load()
-        embeddings = SentenceTransformerEmbeddings(model_name="paraphrase-multilingual-mpnet-base-v2")
-        self.faiss_db = FAISS.from_documents(documents, embeddings)
+        today = date.today().strftime("%Y-%m-%d")
+        faiss_index_path = f"/home/makart/data/faiss_index_{today}"
+        
+        if os.path.exists(faiss_index_path):
+            self.faiss_db = FAISS.load_local(faiss_index_path, self.embeddings)
+        else:
+            loader = CSVLoader(file_path="/home/makart/data/important.csv")
+            documents = loader.load()
+            self.faiss_db = FAISS.from_documents(documents, self.embeddings)
+            self.faiss_db.save_local(faiss_index_path)
 
     def faiss_search(self, query):
         if self.faiss_db is None:
-            self.initialize_faiss_db()
+            today = date.today().strftime("%Y-%m-%d")
+            faiss_index_path = f"/home/makart/data/faiss_index_{today}"
+            
+            try:
+                self.faiss_db = FAISS.load_local(faiss_index_path, self.embeddings)
+            except:
+                self.initialize_faiss_db()
         return self.faiss_db.similarity_search(query)
 
-    def merge_db(self, other_db):
-        self.add_messages(other_db.messages)
+
+db = Database()
+similar_messages = db.faiss_search("Когда встреча с Максимом Шарифовым?")
+print(similar_messages)
