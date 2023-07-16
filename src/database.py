@@ -17,9 +17,6 @@ class Database:
         self.embeddings = SentenceTransformerEmbeddings(model_name="paraphrase-multilingual-mpnet-base-v2")
         self.initialize_faiss_db()
 
-    def add_message(self, message):
-        self.data = self.data.append(message, ignore_index=True)
-
     def initialize_faiss_db(self):
         today = date.today().strftime("%Y-%m-%d")
         faiss_index_path = data_path + f"faiss_index_{today}"
