@@ -6,7 +6,9 @@ name = "pypi"
 [packages]
 jupyterlab = "*"
 numpy = "*"
+pandas = "*"
 torch = "*"
+faiss-cpu = "*"
 langchain = "*"
 install = "*"
 huggingface-hub = "*"
@@ -17,6 +19,7 @@ transformers = "==4.22.2"
 sentencepiece = "*"
 protobuf = "==3.20.0"
 xformers = "*"
+aiogram = "*"
 
 [dev-packages]
 
