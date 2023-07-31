@@ -7,11 +7,18 @@ import csv
 from aiogram import Bot, Dispatcher, executor, types
 from dotenv import load_dotenv
 
+from models.model_refine import ModelRefine
+from database import Database
+
 load_dotenv()
 
 API_TOKEN = os.getenv('API_TOKEN')
 hostname = os.getenv('HOSTNAME')
 data_path = os.getenv('DATA_PATH')
+csv_path = os.path.join(data_path, 'important.csv')
+
+db = Database()
+model = ModelRefine(db)
 
 logging.basicConfig(level=logging.INFO)
 
@@ -47,7 +54,7 @@ async def echo(message: types.Message):
     if user_question == '':
         await message.reply('No question provided!')
     else:
-        await message.reply(user_question)
+        await message.reply(model.response(user_question))
 
 @dp.message_handler(commands=['add'])
 async def process_message(message: types.Message):

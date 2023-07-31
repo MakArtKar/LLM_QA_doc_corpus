@@ -26,6 +26,12 @@ class BaseModel:
     def get_relevant_documents(self, question: str):
         return self.retriever.get_relevant_documents(query=question)
 
-    def response(self, question: str):
+    def response(self, question: str, full: bool = False):
         docs = self.get_relevant_documents(question)
-        return self.qa_chain({"input_documents": docs, "question": question}, return_only_outputs=True)
+        response = self.qa_chain({"input_documents": docs, "question": question}, return_only_outputs=True)
+        if not full:
+            response = response['output_text']
+            while response.startswith('<extra_id_'):
+                response = response[response.find('>', 1) + 1:].strip()
+            return response
+        raise NotImplementedError('BaseModel.response with full = True is not implemented')
