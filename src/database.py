@@ -39,8 +39,3 @@ class Database:
             except:
                 self.initialize_faiss_db()
         return self.faiss_db.similarity_search(query)
-
-
-db = Database()
-similar_messages = db.faiss_search("Когда встреча с Максимом Шарифовым?")
-print(similar_messages)
