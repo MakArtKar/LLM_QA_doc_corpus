@@ -13,6 +13,8 @@ MODELS = {
 }
 
 def get_model(database, strategy, model_id, task, model_kwargs, prompts):
+    if strategy not in prompts:
+        raise ValueError(f"Config doesn't have {strategy} strategy in prompts")
     llm = get_by_model_id(model_id, task, model_kwargs)
     if strategy == 'rerank':
         llm.with_score = True
