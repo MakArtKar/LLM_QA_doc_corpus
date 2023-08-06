@@ -12,8 +12,8 @@ MODELS = {
     'rerank': ModelRerank,
 }
 
-def get_model(database, strategy, model_id, task, model_kwargs, **kwargs):
+def get_model(database, strategy, model_id, task, model_kwargs, prompts):
     llm = get_by_model_id(model_id, task, model_kwargs)
     if strategy == 'rerank':
         llm.with_score = True
-    return MODELS[strategy](llm, database, **kwargs)
+    return MODELS[strategy](llm, database, **prompts[strategy])

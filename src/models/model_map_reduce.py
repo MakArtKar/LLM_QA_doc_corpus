@@ -6,15 +6,6 @@ from utils.langchain import ExtendedHuggingFacePipeline
 from .base_model import BaseModel
 
 
-QUESTION_PROMPT_TEMPLATE = (
-    "<Вопрос>: {question} <Контекст>: {context}"
-)
-
-COMBINE_PROMPT_TEMPLATE = (
-    "<Вопрос>: {question} <Контекст>: Есть ответы на данный вопрос, из них надо выбрать наилучший. {summaries}"
-)
-
-
 class ModelMapReduce(BaseModel):
     def __init__(self, llm: ExtendedHuggingFacePipeline, database: Database, question_prompt=None, combine_prompt=None):
         super().__init__(llm, database, question_prompt=question_prompt, combine_prompt=combine_prompt)
@@ -22,11 +13,11 @@ class ModelMapReduce(BaseModel):
     def init_prompt(self, question_prompt, combine_prompt, **kwargs):
         self.question_prompt = PromptTemplate(
             input_variables=["context", "question"],
-            template=question_prompt or QUESTION_PROMPT_TEMPLATE
+            template=question_prompt
         )
         self.combine_prompt = PromptTemplate(
             input_variables=["summaries", "question"],
-            template=combine_prompt or COMBINE_PROMPT_TEMPLATE
+            template=combine_prompt
         )
 
     def init_qa_chain(self, **kwargs):

@@ -79,6 +79,7 @@ if __name__ == '__main__':
         config['strategy'], 
         config['model_id'], 
         config['task'], 
-        config['model_kwargs']
+        config['model_kwargs'],
+        config['prompts'],
     )
     executor.start_polling(dp, skip_updates=True)

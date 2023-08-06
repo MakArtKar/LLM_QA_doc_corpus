@@ -3,5 +3,21 @@
     "model_id": "Den4ikAI/rubert_large_squad_2",
     "task": "question-answering",
     "model_kwargs": {},
-    "sentence_transformer": null
+    "sentence_transformer": null,
+    "prompts": {
+        "stuff": {
+            "prompt": "<Вопрос>: {question} <Контекст>: {context}"
+        },
+        "refine": {
+            "initial_prompt": "<Вопрос>: {question} <Контекст>: {context_str}",
+            "refine_prompt": "<Вопрос>: {question} <Контекст>: У нас есть ответ на него: {existing_answer}\nЕсть возможность улучшить существующий ответ, (но только, если текущий ответ не подходит) с помощью контекста ниже.\n{context_str}\nИмея новый контекст, уточни существующий ответ, чтобы лучше ответить на изначальный вопрос. Ответь как можно более развернуто, сохранив как можно больше информации. Если контекст бесполезный - верни изначальный ответ."
+        },
+        "map_reduce": {
+            "question_prompt": "<Вопрос>: {question} <Контекст>: {context}",
+            "combine_prompt": "<Вопрос>: {question} <Контекст>: Есть ответы на данный вопрос, из них надо получить итоговый ответ. {summaries}"
+        },
+        "rerank": {
+            "prompt": "<Вопрос>: {question} <Контекст>: {context}"
+        }
+    }
 }

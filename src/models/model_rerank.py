@@ -13,10 +13,6 @@ output_parser = RegexParser(
     default_output_key="answer",
 )
 
-PROMPT_TEMPLATE = (
-    "<Вопрос>: {question} <Контекст>: {context}"
-)
-
 
 class ModelRerank(BaseModel):
     def __init__(self, llm: ExtendedHuggingFacePipeline, database: Database, prompt=None):
@@ -25,7 +21,7 @@ class ModelRerank(BaseModel):
     def init_prompt(self, prompt, **kwargs):
         self.prompt = PromptTemplate(
             input_variables=["context", "question"],
-            template=prompt or PROMPT_TEMPLATE,
+            template=prompt,
             output_parser=output_parser,
         )
 
