@@ -11,10 +11,11 @@ load_dotenv()
 data_path = os.getenv('DATA_PATH')
 
 class Database:
-    def __init__(self):
+    def __init__(self, model_name=None):
+        model_name = model_name or "paraphrase-multilingual-mpnet-base-v2"
         self.data = pd.read_csv(data_path + "important.csv")
         self.faiss_db = None
-        self.embeddings = SentenceTransformerEmbeddings(model_name="paraphrase-multilingual-mpnet-base-v2")
+        self.embeddings = SentenceTransformerEmbeddings(model_name=model_name)
         self.initialize_faiss_db()
 
     def initialize_faiss_db(self):
@@ -38,4 +39,4 @@ class Database:
                 self.faiss_db = FAISS.load_local(faiss_index_path, self.embeddings)
             except:
                 self.initialize_faiss_db()
-        return self.faiss_db.similarity_search(query)
+        return self.faiss_db.similarity_search(query, k=10)

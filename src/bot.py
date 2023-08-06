@@ -6,6 +6,7 @@ import csv
 
 from aiogram import Bot, Dispatcher, executor, types
 from dotenv import load_dotenv
+from models.build_model import get_model
 
 from models.model_refine import ModelRefine
 from database import Database
@@ -17,8 +18,12 @@ hostname = os.getenv('HOSTNAME')
 data_path = os.getenv('DATA_PATH')
 csv_path = os.path.join(data_path, 'important.csv')
 
-db = Database()
-model = ModelRefine(db)
+strategy = 'rerank'
+model_id = 'Den4ikAI/rubert_large_squad_2'
+task = 'question-answering'
+model_kwargs = {}
+db = Database(None)
+model = get_model(db, strategy, model_id, task, model_kwargs)
 
 logging.basicConfig(level=logging.INFO)
 
