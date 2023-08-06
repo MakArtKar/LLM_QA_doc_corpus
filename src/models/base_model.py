@@ -20,14 +20,9 @@ class BaseModel:
     def init_qa_chain(self, **kwargs):
         raise NotImplementedError()
 
-    def get_relevant_documents(self, question: str):
-        return self.retriever.get_relevant_documents(query=question)
-
     def response(self, question: str, full: bool = False):
-        docs = self.get_relevant_documents(question)
+        docs = self.database.faiss_search(question)
         response = self.qa_chain({"input_documents": docs, "question": question})
-        print(response)
-        print('^' * 20)
         if not full:
             response = response['output_text']
             return response

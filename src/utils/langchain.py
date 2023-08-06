@@ -26,8 +26,6 @@ class ExtendedHuggingFacePipeline(HuggingFacePipeline):
  
         if self.pipeline.task == "question-answering":
             prompt = self.qa_input_parser.parse(prompt.replace('\n', ' '))
-        print(prompt)
-        print('=' * 20)
         response = self.pipeline(prompt)
 
         if self.pipeline.task == "text-generation":
