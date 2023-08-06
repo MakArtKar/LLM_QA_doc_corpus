@@ -1,0 +1,7 @@
+{
+    "strategy": "rerank",
+    "model_id": "Den4ikAI/rubert_large_squad_2",
+    "task": "question-answering",
+    "model_kwargs": {},
+    "sentence_transformer": null
+}
