@@ -32,19 +32,10 @@ async def send_welcome(message: types.Message):
 
 @dp.message_handler(commands=['ping'])
 async def send_pong(message: types.Message):
-    pong = ""
     try:
-        result = subprocess.run(['ping', '-c', '5', hostname], capture_output=True, text=True)
-        output = result.stdout
-        regex = r"time=(\d+(\.\d+)?)"
-        match = re.search(regex, output)
-        if match:
-            response_time = match.group(1)
-            pong = f"Bot is up! Response time: {response_time} ms"
-        else:
-            pong = f"Bot is up! Unable to retrieve response time"
+        pong = "Bot is up!"
     except subprocess.CalledProcessError:
-        pong = f"Bot is down!"
+        pong = "Bot is down!"
 
     await message.reply(pong)
 
