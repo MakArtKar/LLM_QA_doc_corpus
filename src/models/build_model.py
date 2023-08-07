@@ -12,10 +12,11 @@ MODELS = {
     'rerank': ModelRerank,
 }
 
-def get_model(database, strategy, model_id, task, model_kwargs, prompts):
+def get_model(database, strategy, model_id, task, model_kwargs, pipeline_kwargs, prompts):
+    print(f"Strategy = {strategy}")
     if strategy not in prompts:
         raise ValueError(f"Config doesn't have {strategy} strategy in prompts")
-    llm = get_by_model_id(model_id, task, model_kwargs)
+    llm = get_by_model_id(model_id, task, model_kwargs, pipeline_kwargs)
     if strategy == 'rerank':
         llm.with_score = True
     return MODELS[strategy](llm, database, **prompts[strategy])

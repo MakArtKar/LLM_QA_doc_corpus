@@ -23,7 +23,8 @@ class BaseModel:
     def response(self, question: str, full: bool = False):
         docs = self.database.faiss_search(question)
         response = self.qa_chain({"input_documents": docs, "question": question})
+        output_text = response['output_text']
         if not full:
-            response = response['output_text']
-            return response
-        raise NotImplementedError('BaseModel.response with full = True is not implemented')
+            return output_text
+        else:
+            return output_text, docs

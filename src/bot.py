@@ -41,13 +41,26 @@ async def send_pong(message: types.Message):
 
 
 @dp.message_handler(commands=['ask'])
-async def echo(message: types.Message):
+async def ask(message: types.Message):
     user_question = message.text[len('/ask'):].strip()
 
     if user_question == '':
         await message.reply('No question provided!')
     else:
         await message.reply(model.response(user_question))
+
+
+@dp.message_handler(commands=['ask_full'])
+async def ask_full(message: types.Message):
+    user_question = message.text[len('/ask_full'):].strip()
+
+    if user_question == '':
+        await message.reply('No question provided!')
+    else:
+        output_text, docs = model.response(user_question, full=True)
+        await message.reply(output_text)
+        for doc in docs:
+            await bot.forward_message(chat_id=message['chat']['id'], from_chat_id=1709947576, message_id=doc.metadata['id_message'])
 
 
 @dp.message_handler(commands=['add'])
@@ -71,6 +84,7 @@ if __name__ == '__main__':
         config['model_id'], 
         config['task'], 
         config['model_kwargs'],
+        config['pipeline_kwargs'],
         config['prompts'],
     )
     executor.start_polling(dp, skip_updates=True)

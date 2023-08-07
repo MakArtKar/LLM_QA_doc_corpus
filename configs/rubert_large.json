@@ -3,6 +3,7 @@
     "model_id": "Den4ikAI/rubert_large_squad_2",
     "task": "question-answering",
     "model_kwargs": {},
+    "pipeline_kwargs": {},
     "sentence_transformer": null,
     "prompts": {
         "stuff": {
